@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #0f0f0f;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .main {
+            background: #1c1c1c;
+            padding: 25px;
+            border-radius: 20px;
+            width: 280px;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.15);
+        }
+
+        input {
+            width: 100%;
+            height: 60px;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: right;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            background: #000;
+            color: limegreen;
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.4);
+            outline: none;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        button {
+            width: 55px;
+            height: 55px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background: #3a3a3a;
+            color: white;
+            transition: 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        button:hover {
+            background: limegreen;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .equal {
+            width: 100%;
+            border-radius: 30px;
+            background: limegreen;
+            color: black;
+            font-weight: bold;
+        }
+
+        .equal:hover {
+            background: #32cd32;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main">
+    <input type="text" id="display" placeholder="0" readonly />
+
+    <div class="row">
+        <button>AC</button>
+        <button>DEL</button>
+        <button>%</button>
+        <button>X</button>
+    </div>
+
+    <div class="row">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>+</button>
+    </div>
+
+    <div class="row">
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>-</button>
+    </div>
+
+    <div class="row">
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button>0</button>
+    </div>
+
+    <div class="row">
+        <button class="equal">=</button>
+    </div>
+</div>
+
+<script>
+
+let display = document.getElementById('display');
+
+let currentInput = "";
+let firstNumber = "";
+let operator = "";
+
+let buttons = document.querySelectorAll("button");
+
+buttons.forEach(function(btn){
+    btn.addEventListener("click", function(){
+
+        let value = btn.innerText;
+
+        // Numbers
+        if(!isNaN(value)){
+            currentInput += value;
+            display.value = currentInput;
+        }
+
+        // Operators
+        else if(value === "+" || value === "-" || value === "X" || value === "%"){
+            if(currentInput !== ""){
+                firstNumber = currentInput;
+                operator = value;
+                currentInput = "";
+            }
+        }
+
+        // AC
+        else if(value === "AC"){
+            currentInput = "";
+            firstNumber = "";
+            operator = "";
+            display.value = "";
+        }
+
+        // DEL
+        else if(value === "DEL"){
+            currentInput = currentInput.slice(0,-1);
+            display.value = currentInput;
+        }
+
+        // Equal
+        else if(value === "="){
+            calculate();
+        }
+
+    });
+});
+
+function calculate(){
+
+    if(firstNumber === "" || currentInput === "") return;
+
+    let secondNumber = currentInput;
+    let result;
+
+    if(operator === "+"){
+        result = Number(firstNumber) + Number(secondNumber);
+    }
+    else if(operator === "-"){
+        result = Number(firstNumber) - Number(secondNumber);
+    }
+    else if(operator === "X"){
+        result = Number(firstNumber) * Number(secondNumber);
+    }
+    else if(operator === "%"){
+        result = Number(firstNumber) % Number(secondNumber);
+    }
+
+    display.value = result;
+    currentInput = result.toString();
+    firstNumber = "";
+    operator = "";
+}
+
+</script>
+
+</body>
+</html>
